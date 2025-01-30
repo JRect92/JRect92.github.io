@@ -91,10 +91,49 @@ document.addEventListener('DOMContentLoaded', () => {
         timestampForm.reset();
     });
 
-    // Get current time in HH:MM format
+    // Check if system uses 24-hour format
+    function is24HourFormat() {
+        const testDate = new Date('2024-01-01T13:00:00');
+        return testDate.toLocaleTimeString().includes('13');
+    }
+
+    // Get current time in appropriate format
     function getCurrentTime() {
         const now = new Date();
-        return now.toTimeString().slice(0, 5); // HH:MM format
+        if (is24HourFormat()) {
+            return now.toTimeString().slice(0, 5); // HH:MM 24-hour format
+        } else {
+            return now.toLocaleTimeString('en-US', { 
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(/^0+/, ''); // 12-hour format
+        }
+    }
+
+    // Format time for display
+    function formatTimeForDisplay(timeStr) {
+        if (!timeStr) return '';
+        
+        try {
+            // Parse the time string
+            const [hours, minutes] = timeStr.split(':').map(num => parseInt(num));
+            const date = new Date();
+            date.setHours(hours, minutes);
+
+            if (is24HourFormat()) {
+                return date.toTimeString().slice(0, 5);
+            } else {
+                return date.toLocaleTimeString('en-US', {
+                    hour12: true,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }).replace(/^0+/, '');
+            }
+        } catch (e) {
+            console.error('Error formatting time:', e);
+            return timeStr;
+        }
     }
 
     // Update title
