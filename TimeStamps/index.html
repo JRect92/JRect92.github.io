@@ -4,95 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced Timestamp Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            color: #00668B;
-        }
-        .timestamp-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .timestamp-form {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .timestamp-form input, .timestamp-form select {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .timestamp-form button {
-            padding: 10px 15px;
-            border: none;
-            background: #00668B;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .timestamp-form button:hover {
-            background: #004d66;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background: #00668B;
-            color: white;
-        }
-        .delete-btn, .edit-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .delete-btn:hover {
-            background: #ff4b4b;
-        }
-        .edit-btn {
-            background: #00668B;
-        }
-        .edit-btn:hover {
-            background: #004d66;
-        }
-        .drag-handle {
-            cursor: grab;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Enhanced Timestamp Manager</h1>
+    <h1>Timestamp Manager</h1>
     <div class="timestamp-container">
-        <form class="timestamp-form" id="timestampForm">
+        <form id="timestampForm">
             <input type="text" id="timestampName" placeholder="Event Title" required>
-            <select id="timeType">
-                <option value="current">Current Time</option>
-                <option value="manual">Manual Time</option>
-            </select>
-            <input type="time" id="manualTime" style="display: none;">
-            <button type="submit">Add Timestamp</button>
+            <button type="submit">Submit Event</button>
         </form>
         <table id="timestampTable">
             <thead>
@@ -105,87 +24,10 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Rows will be dynamically added here -->
+                <!-- Dynamically added rows -->
             </tbody>
         </table>
     </div>
-
-    <script>
-        const timestampForm = document.getElementById('timestampForm');
-        const timestampTable = document.getElementById('timestampTable').querySelector('tbody');
-        const timeType = document.getElementById('timeType');
-        const manualTime = document.getElementById('manualTime');
-
-        // Toggle manual time input visibility
-        timeType.addEventListener('change', () => {
-            manualTime.style.display = timeType.value === 'manual' ? 'block' : 'none';
-        });
-
-        // Add Timestamp
-        timestampForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const eventName = document.getElementById('timestampName').value.trim();
-            const currentTime = new Date().toLocaleTimeString();
-            const selectedTime = manualTime.value || currentTime;
-
-            if (eventName) {
-                addTimestampRow(eventName, selectedTime, '');
-                document.getElementById('timestampName').value = ''; // Clear input field
-                manualTime.value = ''; // Clear manual time field
-            }
-        });
-
-        // Add Row to Table
-        function addTimestampRow(event, startTime, endTime) {
-            const row = document.createElement('tr');
-            row.draggable = true;
-            row.innerHTML = `
-                <td class="drag-handle">☰</td>
-                <td contenteditable="true">${event}</td>
-                <td contenteditable="true">${startTime}</td>
-                <td contenteditable="true">${endTime}</td>
-                <td>
-                    <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
-                </td>
-            `;
-            timestampTable.appendChild(row);
-
-            addDragListeners(row);
-        }
-
-        // Delete Row
-        function deleteRow(button) {
-            const row = button.parentNode.parentNode;
-            row.remove();
-        }
-
-        // Add Drag and Drop for Reordering
-        function addDragListeners(row) {
-            row.addEventListener('dragstart', (e) => {
-                row.classList.add('dragging');
-                e.dataTransfer.setData('text/plain', row.rowIndex);
-            });
-
-            row.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const draggingRow = document.querySelector('.dragging');
-                const rows = [...timestampTable.rows];
-                const currentIndex = draggingRow.rowIndex;
-                const dropIndex = Array.from(timestampTable.rows).indexOf(row);
-
-                if (currentIndex !== dropIndex) {
-                    if (dropIndex > currentIndex) {
-                        row.after(draggingRow);
-                    } else {
-                        row.before(draggingRow);
-                    }
-                }
-            });
-
-            row.addEventListener('dragend', () => {
-                row.classList.remove('dragging');
-            });
-        }
-    </script>
+    <script src="scripts.js"></script>
 </body>
 </html>
