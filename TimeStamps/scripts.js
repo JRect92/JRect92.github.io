@@ -58,13 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
         events.forEach((event, index) => {
             const entry = document.createElement('div');
             entry.className = 'timestamp-entry';
+            
+            const formattedStartTime = formatTimeForDisplay(event.startTime);
+            const formattedEndTime = formatTimeForDisplay(event.endTime);
 
             entry.innerHTML = `
                 <div class="timestamp-left">
                     <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
                     <div class="timestamp-times">
-                        <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                        <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                        <input type="time" value="${formattedStartTime}" onchange="updateTime(${index}, 'start', this.value)">
+                        <input type="time" value="${formattedEndTime}" onchange="updateTime(${index}, 'end', this.value)">
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
