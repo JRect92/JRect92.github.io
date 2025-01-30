@@ -100,10 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="timestamp-left">
                     <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
                     <div class="timestamp-times">
-                        <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                        <span class="time-display">${displayStartTime}</span>
-                        <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
-                        <span class="time-display">${displayEndTime}</span>
+                        <div class="time-input-group">
+                            <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
+                            <span class="time-display">${displayStartTime}</span>
+                        </div>
+                        <div class="time-input-group">
+                            <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                            <span class="time-display">${displayEndTime}</span>
+                        </div>
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
