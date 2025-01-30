@@ -1,12 +1,13 @@
 /* General container styles */
 .timestamp-entry {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    flex-wrap: wrap; /* Wrap for smaller screens */
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
-    margin-bottom: 10px; /* Add spacing between entries */
+    margin-bottom: 10px;
+    align-items: center; /* Center-align content */
 }
 
 /* Title and time fields */
@@ -24,10 +25,11 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap; /* Wrap on small screens */
+    align-items: center;
 }
 
 .timestamp-times input {
-    width: calc(50% - 10px); /* Adjust width dynamically */
+    width: 120px; /* Fixed width for consistency */
     min-width: 100px;
     text-align: center;
     border: 1px solid #ccc;
@@ -44,8 +46,7 @@
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
-    flex: 1;
-    max-width: 45%; /* Prevent button from becoming too wide */
+    flex-shrink: 0;
 }
 
 .timestamp-times button:hover {
@@ -56,10 +57,10 @@
 .timestamp-right {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 5px;
     margin-left: 10px; /* Add spacing from left section */
+    align-items: center;
 }
 
 button.arrow-btn {
@@ -67,8 +68,13 @@ button.arrow-btn {
     color: white;
     border: none;
     padding: 5px;
-    border-radius: 4px;
+    border-radius: 50%; /* Circular buttons */
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button.arrow-btn:hover {
@@ -84,12 +90,7 @@ button.arrow-btn:hover {
 
     .timestamp-right {
         flex-direction: row; /* Arrange arrow buttons horizontally */
-        justify-content: space-evenly;
-    }
-
-    .timestamp-times input,
-    .timestamp-times button {
-        flex: 1 1 45%; /* Allow inputs and buttons to fit nicely */
+        gap: 15px;
     }
 
     .timestamp-left {
