@@ -51,6 +51,27 @@ form button:hover {
     background: #004d66;
 }
 
+/* Copy button styles */
+.copy-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.copy-button {
+    padding: 10px 20px;
+    background: #00668B;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.copy-button:hover {
+    background: #004d66;
+}
+
 /* Timestamp entry container */
 #timestampEntries {
     display: flex;
