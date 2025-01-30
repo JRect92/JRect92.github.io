@@ -9,6 +9,49 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('timestamps', JSON.stringify(events));
     }
 
+    // Format time entry for clipboard
+    function formatTimeEntry(event) {
+        const { title, startTime, endTime } = event;
+        
+        if (startTime === endTime) {
+            // If times are the same, format as "HH:MM - HH:MM Title"
+            return `${startTime} - ${endTime} ${title}`;
+        } else if (!endTime || endTime === "") {
+            // If no end time, format as "HH:MM -   Title"
+            return `${startTime} -   ${title}`;
+        } else if (!startTime || startTime === "") {
+            // If no start time, format as "  - HH:MM Title"
+            return `  - ${endTime} ${title}`;
+        }
+        
+        // Default format "HH:MM - HH:MM Title"
+        return `${startTime} - ${endTime} ${title}`;
+    }
+
+    // Copy formatted text to clipboard
+    function copyToClipboard() {
+        // Format all events
+        const formattedText = events
+            .map(event => formatTimeEntry(event))
+            .join('\n');
+        
+        // Create temporary textarea to copy text
+        const textarea = document.createElement('textarea');
+        textarea.value = formattedText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        try {
+            document.execCommand('copy');
+            alert('Report copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy text:', err);
+            alert('Failed to copy text to clipboard');
+        }
+        
+        document.body.removeChild(textarea);
+    }
+
     // Render entries
     function renderEntries() {
         timestampEntries.innerHTML = '';
@@ -84,6 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
         saveData();
         renderEntries();
     };
+
+    // Add copy button event listener
+    document.getElementById('copyButton').addEventListener('click', copyToClipboard);
 
     // Load initial data
     renderEntries();
