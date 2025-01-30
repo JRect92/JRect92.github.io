@@ -3,11 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const timestampEntries = document.getElementById('timestampEntries');
 
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
-    
-    // Detect if user prefers 24-hour time format
-    const prefers24Hour = new Intl.DateTimeFormat(navigator.language, {
-        hour: 'numeric'
-    }).formatToParts(new Date()).find(part => part.type === 'hour').value.length === 2;
 
     // Save data to localStorage
     function saveData() {
@@ -19,22 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const { title, startTime, endTime } = event;
         
         if (startTime === endTime) {
+            // If times are the same, format as "HH:MM - HH:MM Title"
             return `${startTime} - ${endTime} ${title}`;
         } else if (!endTime || endTime === "") {
+            // If no end time, format as "HH:MM -   Title"
             return `${startTime} -   ${title}`;
         } else if (!startTime || startTime === "") {
+            // If no start time, format as "  - HH:MM Title"
             return `  - ${endTime} ${title}`;
         }
         
+        // Default format "HH:MM - HH:MM Title"
         return `${startTime} - ${endTime} ${title}`;
     }
 
     // Copy formatted text to clipboard
     function copyToClipboard() {
+        // Format all events
         const formattedText = events
             .map(event => formatTimeEntry(event))
             .join('\n');
         
+        // Create temporary textarea to copy text
         const textarea = document.createElement('textarea');
         textarea.value = formattedText;
         document.body.appendChild(textarea);
@@ -49,33 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         document.body.removeChild(textarea);
-    }
-
-    // Convert time between 12h and 24h formats
-    function convertTime(time, to24Hour) {
-        if (!time) return time;
-        
-        const [hours, minutes] = time.split(':').map(num => parseInt(num, 10));
-        
-        if (to24Hour) {
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        } else {
-            let period = hours >= 12 ? 'PM' : 'AM';
-            let hours12 = hours % 12 || 12;
-            return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
-        }
-    }
-
-    // Format time for display
-    function formatTimeForDisplay(time) {
-        if (!time) return '';
-        return prefers24Hour ? time : convertTime(time, false);
-    }
-
-    // Parse displayed time to 24h format for storage
-    function parseTimeForStorage(time) {
-        if (!time) return '';
-        return prefers24Hour ? time : convertTime(time, true);
     }
 
     // Render entries
@@ -120,9 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get current time in HH:MM format
     function getCurrentTime() {
         const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
+        return now.toTimeString().slice(0, 5); // HH:MM format
     }
 
     // Update title
@@ -133,9 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update time
     window.updateTime = (index, type, newTime) => {
-        // Convert the input time to 24-hour format for storage
-        const storedTime = parseTimeForStorage(newTime);
-        events[index][`${type}Time`] = storedTime;
+        events[index][`${type}Time`] = newTime;
         saveData();
     };
 
