@@ -1,41 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
     const timestampForm = document.getElementById('timestampForm');
     const timestampEntries = document.getElementById('timestampEntries');
+    const titleToggle = document.getElementById('titleToggle');
 
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
+    let is24Hour = localStorage.getItem('is24Hour') === 'true';
+
+    // Toggle time format
+    titleToggle.addEventListener('click', () => {
+        is24Hour = !is24Hour;
+        localStorage.setItem('is24Hour', is24Hour);
+        titleToggle.textContent = `${is24Hour ? '24hr' : '12hr'} Timestamp Manager`;
+        renderEntries();
+    });
+
+    // Convert time between 12hr and 24hr formats
+    function convertTime(time, to24Hour) {
+        if (!time) return time;
+        
+        const [hours, minutes] = time.split(':');
+        const hoursNum = parseInt(hours);
+        
+        if (to24Hour) {
+            // Already in 24hr format
+            return time;
+        } else {
+            // Convert 24hr to 12hr
+            const period = hoursNum >= 12 ? 'PM' : 'AM';
+            const hours12 = hoursNum % 12 || 12;
+            return `${hours12.toString().padStart(2, '0')}:${minutes} ${period}`;
+        }
+    }
+
+    // Format time entry for clipboard
+    function formatTimeEntry(event) {
+        const { title, startTime, endTime } = event;
+        let formattedStart = startTime ? convertTime(startTime, is24Hour) : '';
+        let formattedEnd = endTime ? convertTime(endTime, is24Hour) : '';
+        
+        if (startTime === endTime) {
+            return `${formattedStart} - ${formattedEnd} ${title}`;
+        } else if (!endTime || endTime === "") {
+            return `${formattedStart} -   ${title}`;
+        } else if (!startTime || startTime === "") {
+            return `  - ${formattedEnd} ${title}`;
+        }
+        
+        return `${formattedStart} - ${formattedEnd} ${title}`;
+    }
 
     // Save data to localStorage
     function saveData() {
         localStorage.setItem('timestamps', JSON.stringify(events));
     }
 
-    // Format time entry for clipboard
-    function formatTimeEntry(event) {
-        const { title, startTime, endTime } = event;
-        
-        if (startTime === endTime) {
-            // If times are the same, format as "HH:MM - HH:MM Title"
-            return `${startTime} - ${endTime} ${title}`;
-        } else if (!endTime || endTime === "") {
-            // If no end time, format as "HH:MM -   Title"
-            return `${startTime} -   ${title}`;
-        } else if (!startTime || startTime === "") {
-            // If no start time, format as "  - HH:MM Title"
-            return `  - ${endTime} ${title}`;
+    // Clear all entries
+    function clearAllEntries() {
+        if (confirm('Are you sure you want to delete all entries? This cannot be undone.')) {
+            events = [];
+            saveData();
+            renderEntries();
         }
-        
-        // Default format "HH:MM - HH:MM Title"
-        return `${startTime} - ${endTime} ${title}`;
     }
 
     // Copy formatted text to clipboard
     function copyToClipboard() {
-        // Format all events
         const formattedText = events
             .map(event => formatTimeEntry(event))
             .join('\n');
         
-        // Create temporary textarea to copy text
         const textarea = document.createElement('textarea');
         textarea.value = formattedText;
         document.body.appendChild(textarea);
@@ -52,33 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textarea);
     }
 
-    // Check if device uses 24-hour format
-    function is24HourFormat() {
-        const testDate = new Date('2024-01-01T13:00:00');
-        const timeString = new Intl.DateTimeFormat(navigator.language, {
-            hour: 'numeric',
-            hour12: undefined
-        }).format(testDate);
-        return !timeString.match(/AM|PM/i);
-    }
-
-    // Format time for display
-    function formatTimeForDisplay(time) {
-        if (!time) return '';
-        
-        // Parse the HH:MM time string
-        const [hours, minutes] = time.split(':');
-        const date = new Date();
-        date.setHours(parseInt(hours), parseInt(minutes));
-
-        // Format based on system preference
-        return new Intl.DateTimeFormat(navigator.language, {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: !is24HourFormat()
-        }).format(date);
-    }
-
     // Render entries
     function renderEntries() {
         timestampEntries.innerHTML = '';
@@ -86,22 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const entry = document.createElement('div');
             entry.className = 'timestamp-entry';
 
-            // Create the display spans for formatted time
-            const startTimeDisplay = formatTimeForDisplay(event.startTime);
-            const endTimeDisplay = formatTimeForDisplay(event.endTime);
+            // Convert times for display
+            const displayStartTime = event.startTime ? convertTime(event.startTime, is24Hour) : '';
+            const displayEndTime = event.endTime ? convertTime(event.endTime, is24Hour) : '';
 
             entry.innerHTML = `
                 <div class="timestamp-left">
                     <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
                     <div class="timestamp-times">
-                        <div class="time-input-container">
-                            <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                            <span class="time-display">${startTimeDisplay}</span>
-                        </div>
-                        <div class="time-input-container">
-                            <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
-                            <span class="time-display">${endTimeDisplay}</span>
-                        </div>
+                        <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
+                        <span class="time-display">${displayStartTime}</span>
+                        <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                        <span class="time-display">${displayEndTime}</span>
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
@@ -144,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.updateTime = (index, type, newTime) => {
         events[index][`${type}Time`] = newTime;
         saveData();
+        renderEntries(); // Re-render to update the displayed times
     };
 
     // Delete event
@@ -165,18 +168,12 @@ document.addEventListener('DOMContentLoaded', () => {
         renderEntries();
     };
 
-    // Clear all entries
-    function clearAllEntries() {
-        if (confirm('Are you sure you want to delete all entries? This cannot be undone.')) {
-            events = [];
-            saveData();
-            renderEntries();
-        }
-    }
-
-    // Add button event listeners
+    // Add event listeners
     document.getElementById('copyButton').addEventListener('click', copyToClipboard);
     document.getElementById('clearButton').addEventListener('click', clearAllEntries);
+
+    // Initialize title based on saved preference
+    titleToggle.textContent = `${is24Hour ? '24hr' : '12hr'} Timestamp Manager`;
 
     // Load initial data
     renderEntries();
