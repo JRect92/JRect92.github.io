@@ -1,44 +1,110 @@
-/* General container styles */
+/* General page styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    background: #00668B;
+    color: white;
+    margin: 0;
+}
+
+.timestamp-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styles */
+form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px 15px;
+    border: none;
+    background: #00668B;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #004d66;
+}
+
+/* Timestamp entry container */
+#timestampEntries {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Individual timestamp entry */
 .timestamp-entry {
     display: flex;
-    flex-wrap: wrap; /* Wrap for smaller screens */
+    flex-wrap: wrap;
+    align-items: stretch;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
-    margin-bottom: 10px;
-    align-items: center; /* Center-align content */
 }
 
-/* Title and time fields */
+/* Left section: Title and times */
 .timestamp-left {
     flex: 1;
-    min-width: 60%; /* Prevent excessive shrinking */
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    word-wrap: break-word; /* Break long words gracefully */
+    justify-content: space-between;
 }
 
-/* Time input styles */
+.timestamp-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+
 .timestamp-times {
+    font-size: 14px;
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap; /* Wrap on small screens */
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
     align-items: center;
 }
 
 .timestamp-times input {
-    width: 120px; /* Fixed width for consistency */
-    min-width: 100px;
+    flex: 1;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     padding: 5px;
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 100px;
 }
 
-/* Delete button */
 .timestamp-times button {
     background: #ff6b6b;
     color: white;
@@ -53,23 +119,23 @@
     background: #ff4b4b;
 }
 
-/* Reorder buttons */
+/* Right section: Reorder buttons */
 .timestamp-right {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 5px;
-    margin-left: 10px; /* Add spacing from left section */
+    justify-content: center;
     align-items: center;
+    gap: 5px;
+    padding-left: 10px;
 }
 
 button.arrow-btn {
-    background: #00668B;
-    color: white;
-    border: none;
     padding: 5px;
+    border: none;
     border-radius: 50%; /* Circular buttons */
     cursor: pointer;
+    background: #00668B;
+    color: white;
     width: 30px;
     height: 30px;
     display: flex;
