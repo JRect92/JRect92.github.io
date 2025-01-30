@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+        main {
+            padding: 1em;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+            color: #333;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Landing Page</h1>
+    </header>
+    <main>
+        <p>This is a simple landing page. You can add more content here.</p>
+        <div class="links">
+            <h2>Links to other index.html files:</h2>
+            <div id="links-container"></div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </footer>
+    <script>
+        async function fetchIndexFiles() {
+            const repoUrl = 'https://api.github.com/repos/JRect92/JRect92.github.io/git/trees/main?recursive=1';
+            const response = await fetch(repoUrl);
+            const data = await response.json();
+            const linksContainer = document.getElementById('links-container');
+            
+            data.tree.forEach(file => {
+                if (file.path.endsWith('index.html')) {
+                    const link = document.createElement('a');
+                    link.href = `https://github.com/JRect92/JRect92.github.io/blob/main/${file.path}`;
+                    link.textContent = file.path;
+                    linksContainer.appendChild(link);
+                }
+            });
+        }
 
+        fetchIndexFiles();
+    </script>
+</body>
+</html>
