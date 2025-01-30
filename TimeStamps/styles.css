@@ -95,6 +95,14 @@ button.delete-btn:hover {
     background: #ff4b4b;
 }
 
+.hidden {
+    display: none;
+}
+
+button {
+    margin: 5px;
+}
+
 @media (max-width: 600px) {
     table {
         font-size: 14px;
