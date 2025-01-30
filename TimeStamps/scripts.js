@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const timestampForm = document.getElementById('timestampForm');
-    const timestampTable = document.getElementById('timestampTable').querySelector('tbody');
+    const timestampEntries = document.getElementById('timestampEntries');
 
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
 
@@ -9,30 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('timestamps', JSON.stringify(events));
     }
 
-    // Render the table
-    function renderTable() {
-        timestampTable.innerHTML = '';
+    // Render entries
+    function renderEntries() {
+        timestampEntries.innerHTML = '';
         events.forEach((event, index) => {
-            const row = document.createElement('tr');
+            const entry = document.createElement('div');
+            entry.className = 'timestamp-entry';
 
-            row.innerHTML = `
-                <td>
-                    <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                </td>
-                <td>
-                    <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
-                </td>
-                <td contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</td>
-                <td>
-                    <button class="delete-btn" onclick="deleteEvent(${index})">Delete</button>
-                </td>
-                <td>
-                    <button class="up-btn" onclick="moveEvent(${index}, -1)">▲</button>
-                    <button class="down-btn" onclick="moveEvent(${index}, 1)">▼</button>
-                </td>
+            entry.innerHTML = `
+                <div class="timestamp-left">
+                    <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
+                    <div class="timestamp-times">
+                        <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
+                        <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                    </div>
+                </div>
+                <div class="timestamp-right">
+                    <button class="arrow-btn" onclick="moveEvent(${index}, -1)">▲</button>
+                    <button class="arrow-btn" onclick="moveEvent(${index}, 1)">▼</button>
+                </div>
             `;
 
-            timestampTable.appendChild(row);
+            timestampEntries.appendChild(entry);
         });
     }
 
@@ -42,11 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('timestampName').value.trim();
         if (!title) return;
 
-        events.push({ title, startTime: '', endTime: '' });
+        const currentTime = getCurrentTime();
+        events.push({ title, startTime: currentTime, endTime: currentTime });
         saveData();
-        renderTable();
+        renderEntries();
         timestampForm.reset();
     });
+
+    // Get current time in HH:MM format
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toTimeString().slice(0, 5); // HH:MM format
+    }
 
     // Update title
     window.updateTitle = (index, newTitle) => {
@@ -60,15 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveData();
     };
 
-    // Delete event
-    window.deleteEvent = (index) => {
-        if (confirm('Are you sure you want to delete this event?')) {
-            events.splice(index, 1);
-            saveData();
-            renderTable();
-        }
-    };
-
     // Move event
     window.moveEvent = (index, direction) => {
         const newIndex = index + direction;
@@ -76,9 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         [events[index], events[newIndex]] = [events[newIndex], events[index]];
         saveData();
-        renderTable();
+        renderEntries();
     };
 
     // Load initial data
-    renderTable();
-}); 
+    renderEntries();
+});
