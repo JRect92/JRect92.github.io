@@ -65,8 +65,16 @@ form button:hover {
     background: #004d66;
 }
 
-.copy-button {
+.copy-button, .clear-button {
     padding: 10px 20px;
+}
+
+.clear-button {
+    background: #dc3545;
+}
+
+.clear-button:hover {
+    background: #c82333;
 }
 
 /* Timestamp entry container */
