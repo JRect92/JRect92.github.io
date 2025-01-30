@@ -67,7 +67,7 @@
             data.tree.forEach(file => {
                 if (file.path.endsWith('index.html')) {
                     const link = document.createElement('a');
-                    link.href = `https://github.com/JRect92/JRect92.github.io/blob/main/${file.path}`;
+                    link.href = `https://jrect92.github.io/${file.path}`;
                     link.textContent = file.path;
                     linksContainer.appendChild(link);
                 }
