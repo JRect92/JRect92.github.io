@@ -119,8 +119,14 @@ form button:hover {
     align-items: center;
 }
 
-.timestamp-times input {
+.time-input-container {
+    position: relative;
     flex: 1;
+    min-width: 100px;
+}
+
+.timestamp-times input[type="time"] {
+    width: 100%;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -128,7 +134,23 @@ form button:hover {
     padding: 5px;
     -webkit-appearance: none;
     appearance: none;
-    min-width: 100px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    cursor: pointer;
+}
+
+.time-display {
+    display: block;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 5px;
+    background: white;
+    pointer-events: none;
 }
 
 .timestamp-times button {
