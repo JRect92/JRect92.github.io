@@ -57,12 +57,13 @@ form button:hover {
 
 .timestamp-entry {
     display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
+    justify-content: space-between;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
+    flex-wrap: wrap;
 }
 
 .timestamp-left {
@@ -82,7 +83,7 @@ form button:hover {
 .timestamp-times {
     font-size: 14px;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     gap: 10px;
 }
 
@@ -97,13 +98,26 @@ form button:hover {
     appearance: none;
 }
 
+.timestamp-times button {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.timestamp-times button:hover {
+    background: #ff4b4b;
+}
+
 .timestamp-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
-    padding-left: 10px;
+    margin-left: 10px;
 }
 
 button.arrow-btn {
