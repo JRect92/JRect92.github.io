@@ -22,22 +22,30 @@ h1.clickable:hover {
     background: #004d66;
 }
 
-/* Hide the time input but keep it functional */
-.timestamp-times input[type="time"] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+/* Time input group styling */
+.time-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
 }
 
-/* Style for the visible time display */
-.time-display {
-    padding: 5px 10px;
+.time-input-group input[type="time"] {
+    width: 100%;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    min-width: 100px;
+    font-size: 14px;
     text-align: center;
-    background: white;
-    cursor: pointer;
+}
+
+.time-display {
+    position: absolute;
+    right: 0;
+    padding: 5px;
+    font-size: 14px;
+    pointer-events: none;
+    color: #666;
 }
 
 .timestamp-container {
