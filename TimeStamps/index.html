@@ -11,22 +11,11 @@
     <div class="timestamp-container">
         <form id="timestampForm">
             <input type="text" id="timestampName" placeholder="Event Title" required>
-            <button type="submit">Submit Event</button>
+            <button type="submit">Add Event</button>
         </form>
-        <table id="timestampTable">
-            <thead>
-                <tr>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Event Title</th>
-                    <th>Delete</th>
-                    <th>Reorder</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dynamically added rows -->
-            </tbody>
-        </table>
+        <div id="timestampEntries">
+            <!-- Entries will be dynamically added here -->
+        </div>
     </div>
     <script src="scripts.js"></script>
 </body>
