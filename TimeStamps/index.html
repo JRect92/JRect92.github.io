@@ -13,30 +13,14 @@
             <input type="text" id="timestampName" placeholder="Event Title" required>
             <button type="submit">Submit Event</button>
         </form>
-        <div id="timeOptions" class="hidden">
-            <p>Select Time Type:</p>
-            <button data-time-type="current">Current Time</button>
-            <button data-time-type="manual">Manual Time</button>
-        </div>
-        <div id="timePicker" class="hidden">
-            <p>Select Time:</p>
-            <input type="time" id="manualTime">
-            <button id="confirmTime">Confirm</button>
-        </div>
-        <div id="timeCategory" class="hidden">
-            <p>Select Time Category:</p>
-            <button data-time-category="start">Start Time</button>
-            <button data-time-category="end">End Time</button>
-            <button data-time-category="instance">Instance</button>
-        </div>
         <table id="timestampTable">
             <thead>
                 <tr>
-                    <th>Reorder</th>
-                    <th>Event</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Actions</th>
+                    <th>Event Title</th>
+                    <th>Delete</th>
+                    <th>Reorder</th>
                 </tr>
             </thead>
             <tbody>
