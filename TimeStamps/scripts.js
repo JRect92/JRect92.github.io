@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="timestamp-times">
                         <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
                         <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                        <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
                 <div class="timestamp-right">
@@ -63,6 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.updateTime = (index, type, newTime) => {
         events[index][`${type}Time`] = newTime;
         saveData();
+    };
+
+    // Delete event
+    window.deleteEvent = (index) => {
+        if (confirm('Are you sure you want to delete this event?')) {
+            events.splice(index, 1);
+            saveData();
+            renderEntries();
+        }
     };
 
     // Move event
