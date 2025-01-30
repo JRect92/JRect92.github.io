@@ -128,8 +128,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderEntries();
     };
 
-    // Add copy button event listener
+    // Clear all entries
+    function clearAllEntries() {
+        if (confirm('Are you sure you want to delete all entries? This cannot be undone.')) {
+            events = [];
+            saveData();
+            renderEntries();
+        }
+    }
+
+    // Add button event listeners
     document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+    document.getElementById('clearButton').addEventListener('click', clearAllEntries);
 
     // Load initial data
     renderEntries();
