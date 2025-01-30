@@ -1,108 +1,52 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-h1 {
-    text-align: center;
-    padding: 20px;
-    background: #00668B;
-    color: white;
-    margin: 0;
-}
-
-.timestamp-container {
-    max-width: 600px;
-    margin: 20px auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-form input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-form button {
-    padding: 10px 15px;
-    border: none;
-    background: #00668B;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background: #004d66;
-}
-
-#timestampEntries {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
+/* General container styles */
 .timestamp-entry {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
     justify-content: space-between;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
-    flex-wrap: wrap;
 }
 
+/* Left section (title & time fields) */
 .timestamp-left {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
 }
 
+/* Title style */
 .timestamp-title {
     font-weight: bold;
-    margin-bottom: 5px;
     word-wrap: break-word;
     cursor: pointer;
 }
 
+/* Time fields and delete button */
 .timestamp-times {
-    font-size: 14px;
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap; /* Allow wrapping */
 }
 
 .timestamp-times input {
-    flex: 1;
+    width: 100px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     padding: 5px;
-    -webkit-appearance: none;
-    appearance: none;
 }
 
 .timestamp-times button {
+    width: 100%;
     background: #ff6b6b;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 5px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -111,17 +55,17 @@ form button:hover {
     background: #ff4b4b;
 }
 
+/* Reorder buttons on the right */
 .timestamp-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
-    margin-left: 10px;
 }
 
 button.arrow-btn {
-    padding: 5px 10px;
+    padding: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -131,4 +75,29 @@ button.arrow-btn {
 
 button.arrow-btn:hover {
     background: #004d66;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+    .timestamp-entry {
+        flex-direction: column; /* Stack elements vertically */
+        gap: 10px;
+    }
+
+    .timestamp-right {
+        flex-direction: row; /* Make arrow buttons horizontal */
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    .timestamp-times {
+        flex-wrap: wrap; /* Wrap time fields and delete button */
+        justify-content: space-between;
+    }
+
+    .timestamp-times input,
+    .timestamp-times button {
+        flex: 1;
+        max-width: 45%; /* Make input fields and button fit */
+    }
 }
