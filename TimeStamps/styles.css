@@ -1,39 +1,34 @@
 /* General container styles */
 .timestamp-entry {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
-    justify-content: space-between;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
+    margin-bottom: 10px; /* Add spacing between entries */
 }
 
-/* Left section (title & time fields) */
+/* Title and time fields */
 .timestamp-left {
     flex: 1;
+    min-width: 60%; /* Prevent excessive shrinking */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    word-wrap: break-word; /* Break long words gracefully */
 }
 
-/* Title style */
-.timestamp-title {
-    font-weight: bold;
-    word-wrap: break-word;
-    cursor: pointer;
-}
-
-/* Time fields and delete button */
+/* Time input styles */
 .timestamp-times {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap; /* Allow wrapping */
+    gap: 8px;
+    flex-wrap: wrap; /* Wrap on small screens */
 }
 
 .timestamp-times input {
-    width: 100px;
+    width: calc(50% - 10px); /* Adjust width dynamically */
+    min-width: 100px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -41,36 +36,39 @@
     padding: 5px;
 }
 
+/* Delete button */
 .timestamp-times button {
-    width: 100%;
     background: #ff6b6b;
     color: white;
     border: none;
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    flex: 1;
+    max-width: 45%; /* Prevent button from becoming too wide */
 }
 
 .timestamp-times button:hover {
     background: #ff4b4b;
 }
 
-/* Reorder buttons on the right */
+/* Reorder buttons */
 .timestamp-right {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: 5px;
+    margin-left: 10px; /* Add spacing from left section */
 }
 
 button.arrow-btn {
-    padding: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     background: #00668B;
     color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 button.arrow-btn:hover {
@@ -85,19 +83,16 @@ button.arrow-btn:hover {
     }
 
     .timestamp-right {
-        flex-direction: row; /* Make arrow buttons horizontal */
-        justify-content: space-around;
-        gap: 10px;
-    }
-
-    .timestamp-times {
-        flex-wrap: wrap; /* Wrap time fields and delete button */
-        justify-content: space-between;
+        flex-direction: row; /* Arrange arrow buttons horizontally */
+        justify-content: space-evenly;
     }
 
     .timestamp-times input,
     .timestamp-times button {
-        flex: 1;
-        max-width: 45%; /* Make input fields and button fit */
+        flex: 1 1 45%; /* Allow inputs and buttons to fit nicely */
+    }
+
+    .timestamp-left {
+        min-width: 100%; /* Take full width on small screens */
     }
 }
