@@ -102,11 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="timestamp-times">
                         <div class="time-input-group">
                             <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                            <span class="time-display">${displayStartTime}</span>
+                            <div class="time-display">${displayStartTime}</div>
                         </div>
                         <div class="time-input-group">
                             <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
-                            <span class="time-display">${displayEndTime}</span>
+                            <div class="time-display">${displayEndTime}</div>
                         </div>
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
