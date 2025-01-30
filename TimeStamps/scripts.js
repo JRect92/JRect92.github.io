@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const timestampEntries = document.getElementById('timestampEntries');
 
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
+    
+    // Detect if user prefers 24-hour time format
+    const prefers24Hour = new Intl.DateTimeFormat(navigator.language, {
+        hour: 'numeric'
+    }).formatToParts(new Date()).find(part => part.type === 'hour').value.length === 2;
 
     // Save data to localStorage
     function saveData() {
@@ -14,28 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const { title, startTime, endTime } = event;
         
         if (startTime === endTime) {
-            // If times are the same, format as "HH:MM - HH:MM Title"
             return `${startTime} - ${endTime} ${title}`;
         } else if (!endTime || endTime === "") {
-            // If no end time, format as "HH:MM -   Title"
             return `${startTime} -   ${title}`;
         } else if (!startTime || startTime === "") {
-            // If no start time, format as "  - HH:MM Title"
             return `  - ${endTime} ${title}`;
         }
         
-        // Default format "HH:MM - HH:MM Title"
         return `${startTime} - ${endTime} ${title}`;
     }
 
     // Copy formatted text to clipboard
     function copyToClipboard() {
-        // Format all events
         const formattedText = events
             .map(event => formatTimeEntry(event))
             .join('\n');
         
-        // Create temporary textarea to copy text
         const textarea = document.createElement('textarea');
         textarea.value = formattedText;
         document.body.appendChild(textarea);
@@ -59,12 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const entry = document.createElement('div');
             entry.className = 'timestamp-entry';
 
+            // Ensure startTime and endTime have default values if they're undefined
+            const startTime = event.startTime || '';
+            const endTime = event.endTime || '';
+
             entry.innerHTML = `
                 <div class="timestamp-left">
                     <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
                     <div class="timestamp-times">
-                        <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                        <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                        <input type="time" value="${startTime}" onchange="updateTime(${index}, 'start', this.value)">
+                        <input type="time" value="${endTime}" onchange="updateTime(${index}, 'end', this.value)">
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
@@ -94,7 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get current time in HH:MM format
     function getCurrentTime() {
         const now = new Date();
-        return now.toTimeString().slice(0, 5); // HH:MM format
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
     }
 
     // Update title
