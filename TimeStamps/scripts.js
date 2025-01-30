@@ -3,11 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const timestampEntries = document.getElementById('timestampEntries');
 
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
-    
-    // Detect if user prefers 24-hour time format
-    const prefers24Hour = new Intl.DateTimeFormat(navigator.language, {
-        hour: 'numeric'
-    }).formatToParts(new Date()).find(part => part.type === 'hour').value.length === 2;
 
     // Save data to localStorage
     function saveData() {
@@ -19,22 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const { title, startTime, endTime } = event;
         
         if (startTime === endTime) {
+            // If times are the same, format as "HH:MM - HH:MM Title"
             return `${startTime} - ${endTime} ${title}`;
         } else if (!endTime || endTime === "") {
+            // If no end time, format as "HH:MM -   Title"
             return `${startTime} -   ${title}`;
         } else if (!startTime || startTime === "") {
+            // If no start time, format as "  - HH:MM Title"
             return `  - ${endTime} ${title}`;
         }
         
+        // Default format "HH:MM - HH:MM Title"
         return `${startTime} - ${endTime} ${title}`;
     }
 
     // Copy formatted text to clipboard
     function copyToClipboard() {
+        // Format all events
         const formattedText = events
             .map(event => formatTimeEntry(event))
             .join('\n');
         
+        // Create temporary textarea to copy text
         const textarea = document.createElement('textarea');
         textarea.value = formattedText;
         document.body.appendChild(textarea);
@@ -51,6 +52,33 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textarea);
     }
 
+    // Check if device uses 24-hour format
+    function is24HourFormat() {
+        const testDate = new Date('2024-01-01T13:00:00');
+        const timeString = new Intl.DateTimeFormat(navigator.language, {
+            hour: 'numeric',
+            hour12: undefined
+        }).format(testDate);
+        return !timeString.match(/AM|PM/i);
+    }
+
+    // Format time for display
+    function formatTimeForDisplay(time) {
+        if (!time) return '';
+        
+        // Parse the HH:MM time string
+        const [hours, minutes] = time.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours), parseInt(minutes));
+
+        // Format based on system preference
+        return new Intl.DateTimeFormat(navigator.language, {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: !is24HourFormat()
+        }).format(date);
+    }
+
     // Render entries
     function renderEntries() {
         timestampEntries.innerHTML = '';
@@ -58,16 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const entry = document.createElement('div');
             entry.className = 'timestamp-entry';
 
-            // Ensure startTime and endTime have default values if they're undefined
-            const startTime = event.startTime || '';
-            const endTime = event.endTime || '';
+            // Create the display spans for formatted time
+            const startTimeDisplay = formatTimeForDisplay(event.startTime);
+            const endTimeDisplay = formatTimeForDisplay(event.endTime);
 
             entry.innerHTML = `
                 <div class="timestamp-left">
                     <div class="timestamp-title" contenteditable="true" onblur="updateTitle(${index}, this.innerText)">${event.title}</div>
                     <div class="timestamp-times">
-                        <input type="time" value="${startTime}" onchange="updateTime(${index}, 'start', this.value)">
-                        <input type="time" value="${endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                        <div class="time-input-container">
+                            <input type="time" value="${event.startTime}" onchange="updateTime(${index}, 'start', this.value)">
+                            <span class="time-display">${startTimeDisplay}</span>
+                        </div>
+                        <div class="time-input-container">
+                            <input type="time" value="${event.endTime}" onchange="updateTime(${index}, 'end', this.value)">
+                            <span class="time-display">${endTimeDisplay}</span>
+                        </div>
                         <button onclick="deleteEvent(${index})">Delete</button>
                     </div>
                 </div>
@@ -97,9 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get current time in HH:MM format
     function getCurrentTime() {
         const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
+        return now.toTimeString().slice(0, 5); // HH:MM format
     }
 
     // Update title
