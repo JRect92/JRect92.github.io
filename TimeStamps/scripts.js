@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // initialize service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./nsw.js')
+    navigator.serviceWorker.register('./sw.js')
   });
 } 
     
