@@ -1,0 +1,15 @@
+{
+  "short_name": "STS",
+  "name": "Simple TimeStamps",
+  "icons": [
+    {
+      "src": "./Icon.png",
+      "sizes": "600x600",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "https://jrect92.github.io/TimeStamps/index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
