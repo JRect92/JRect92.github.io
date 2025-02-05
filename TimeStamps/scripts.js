@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let events = JSON.parse(localStorage.getItem('timestamps')) || [];
     let is24Hour = localStorage.getItem('is24Hour') === 'true';
 
+    
+// initialize service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./nsw.js')
+  });
+} 
+    
     // Toggle time format
     titleToggle.addEventListener('click', () => {
         is24Hour = !is24Hour;
