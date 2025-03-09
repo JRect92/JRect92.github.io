@@ -59,7 +59,7 @@
     </footer>
     <script>
         async function fetchIndexFiles() {
-            const repoUrl = 'https://api.github.com/repos/JRect92/JRect92.github.io/git/trees/main?recursive=1';
+            const repoUrl = 'https://api.github.com/repos/JRect92/JRect92.github.io/git/trees/main?recursive=5';
             const response = await fetch(repoUrl);
             const data = await response.json();
             const linksContainer = document.getElementById('links-container');
